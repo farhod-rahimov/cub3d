@@ -1,0 +1,132 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_2d.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: btammara <btammara@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/13 16:03:41 by btammara          #+#    #+#             */
+/*   Updated: 2020/12/15 15:58:556 by btammara         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "/Users/btammara/projects/cub3d/minilibx_mms_20200219/mlx.h"
+#include "./cub3d.h"
+// gcc test.c libmlx.dylib -framework OpenGl -framework Appkit
+
+int	check_sides_for_raycsting(t_parse *cub_file)
+{
+	int storona = 0;
+
+	if (cub_file->FOV >= 0)
+	{
+		if ((int)(cub_file->FOV * 180 / PI) % 360 >= 0 && (int)(cub_file->FOV * 180 / PI) % 360 < 90) // lower right
+		{
+			if (check_lower_side(cub_file, 0) < check_right_side(cub_file, 0))
+			{
+				check_lower_side(cub_file, 0);
+				storona = 'S';
+			}
+			else
+			{
+				check_right_side(cub_file, 0);
+				storona = 'E';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 90 && (int)(cub_file->FOV * 180 / PI) % 360 < 180) // lower left
+		{
+			if (check_lower_side(cub_file, 0) < check_left_side(cub_file, 0) * -1)
+			{
+				check_lower_side(cub_file, 0);
+				storona = 'S';
+			}
+			else
+			{
+				check_left_side(cub_file, 0);
+				storona = 'W';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 180 && (int)(cub_file->FOV * 180 / PI) % 360 < 270) // upper left
+		{
+			if (check_upper_side(cub_file, 0) * -1 < check_left_side(cub_file, 0) * -1)
+			{
+				check_upper_side(cub_file, 0);
+				storona = 'N';
+			}
+			else
+			{
+				check_left_side(cub_file, 0);
+				storona = 'W';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 270 && (int)(cub_file->FOV * 180 / PI) % 360 < 360) // upper right
+		{
+			if (check_upper_side(cub_file, 0) * -1 < check_right_side(cub_file, 0))
+			{
+				check_upper_side(cub_file, 0);
+				storona = 'N';
+			}
+			else
+			{
+				check_right_side(cub_file, 0);
+				storona = 'E';
+			}
+		}
+	}
+	else
+	{
+		if ((int)(cub_file->FOV * 180 / PI) % 360 <= 0 && (int)(cub_file->FOV * 180 / PI) % 360 > -90) // upper right
+		{
+			if (check_upper_side(cub_file, 0) * -1 < check_right_side(cub_file, 0))
+			{
+				check_upper_side(cub_file, 0);
+				storona = 'N';
+			}
+			else
+			{
+				check_right_side(cub_file, 0);
+				storona = 'E';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -90 && (int)(cub_file->FOV * 180 / PI) % 360 > -180) // upper left
+		{
+			if (check_upper_side(cub_file, 0) * -1 < check_left_side(cub_file, 0) * -1)
+			{
+				check_upper_side(cub_file, 0);
+				storona = 'N';
+			}
+			else
+			{
+				check_left_side(cub_file, 0);
+				storona = 'W';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -180 && (int)(cub_file->FOV * 180 / PI) % 360 > -270) // lower left
+		{
+			if (check_lower_side(cub_file, 0) < check_left_side(cub_file, 0) * -1)
+			{
+				check_lower_side(cub_file, 0);
+				storona = 'S';
+			}
+			else
+			{
+				check_left_side(cub_file, 0);
+				storona = 'W';
+			}
+		}
+		else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -270 && (int)(cub_file->FOV * 180 / PI) % 360 > -360) // lower right
+		{
+			if (check_lower_side(cub_file, 0) < check_right_side(cub_file, 0))
+			{
+				check_lower_side(cub_file, 0);
+				storona = 'S';
+			}
+			else
+			{
+				check_right_side(cub_file, 0);
+				storona = 'E';
+			}
+		}
+	}
+	return (storona);
+}
