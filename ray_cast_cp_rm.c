@@ -175,31 +175,23 @@ int					ray_cast_sprites(t_parse *cub_file)
 	stolbec_x = 0;
 	cub_file->addr_text = mlx_get_data_addr(cub_file->img_sprite, &cub_file->bits_per_pixel_text, &cub_file->line_length_text, &cub_file->endian_text);
 	// int quququ = 0;
-	// char **tmp_map2d;
-	// if ((tmp_map2d = ft_copy_map2d(cub_file->map2d, cub_file)) == NULL)
-	// 	return (-1);
-	while (cub_file->FOV <= cub_file->player_a + (PI / 6 && tmp_x < cub_file->Rx - 1) /*&& i <= cub_file->width_sprite*/ /*&& cub_file->sprite_start < cub_file->sprite_end*/)
+	char **tmp_map2d;
+	if ((tmp_map2d = ft_copy_map2d(cub_file->map2d, cub_file)) == NULL)
+		return (-1);
+	while (cub_file->FOV <= cub_file->player_a + (PI / 6) /*&& i <= cub_file->width_sprite*/ /*&& cub_file->sprite_start < cub_file->sprite_end*/)
 	{
 		tmp_x2 = tmp_x;
 		num_of_sprites = check_num_of_sprites(cub_file);
 		while (num_of_sprites > 0)
 		{
+			// printf("num %d\n", num_of_sprites);
+			tmp_x = tmp_x2;
+			// printf ("num_of-sprites %d\n", num_of_sprites);
 			if (get_n_sprite(cub_file, num_of_sprites) == 0)
 				break ;
-			printf("num_of_sprites %d\n", num_of_sprites);
-			printf("FOV %Lf\n", cub_file->FOV * 180 / PI);
-			printf("side %c\n", cub_file->side);
-			exit(1);
-			if (check_if_sprite_is_drawn(cub_file) == -1)
-			{
-				num_of_sprites--;
-				continue;
-			}
 			if (cub_file->len_of_c < 0)
 				cub_file->len_of_c *= -1;
-			printf("c_y / SCALE %d\n", (int)cub_file->c_y / SCALE);
-			printf("c_x / SCLAE %d\n", (int)cub_file->c_x / SCALE);
-			// remove_sprite_from_map2d(cub_file);
+			remove_sprite_from_map2d(cub_file);
 			// printf("c_y %d, c_x %d\n", (int)cub_file->c_y, (int)cub_file->c_x);
 			// printf("c_y / SCALE %d, c_x / SCALE %d\n--------------\n", (int)cub_file->c_y / SCALE, (int)cub_file->c_x / SCALE);
 			// break ;
@@ -238,68 +230,16 @@ int					ray_cast_sprites(t_parse *cub_file)
 				tmp_x++;
 				tmp_len_of_c_nachalo = tmp_len_of_c_nachalo2;
 			}
-			tmp_x = tmp_x2;
 			num_of_sprites--;
 		}
 		tmp_x++;
 		cub_file->FOV += (PI / 3) / cub_file->Rx;
 	}
-	match_sprites_as_not_drawn(cub_file);
-	// ft_free_map2d(cub_file->map2d, cub_file);
-	// if ((cub_file->map2d = ft_copy_map2d(tmp_map2d, cub_file)) == NULL)
-	// 	return (-1);
-	// ft_free_map2d(tmp_map2d, cub_file);
+	ft_free_map2d(cub_file->map2d, cub_file);
+	if ((cub_file->map2d = ft_copy_map2d(tmp_map2d, cub_file)) == NULL)
+		return (-1);
+	ft_free_map2d(tmp_map2d, cub_file);
 	return (0);
-}
-
-int check_if_sprite_is_drawn(t_parse *cub_file)
-{
-	long double c_x = cub_file->c_x;
-	long double c_y = cub_file->c_y;
-	int i = 0;
-
-	// printf("cub_file->c_y %d\n", (int)cub_file->c_y);
-	// printf("cub_file->c_x %d\n", (int)cub_file->c_x);
-	// printf("c_y %d\n", (int)c_y);
-	// printf("c_x %d\n", (int)c_x);
-	// printf("[i][0] %d, c_y / SCALE %d\n", cub_file->sprites[i][0], (int)(c_y / SCALE));
-	// printf("[i][1] %d, c_x / SCALE %d\n\n", cub_file->sprites[i][1], (int)(c_x / SCALE));
-	while (i < cub_file->num_of_sprites)
-	{
-		if ((int)c_y / SCALE == cub_file->sprites[i][0]
-		&& (int)c_x / SCALE  ==  cub_file->sprites[i][1])
-		{
-		// printf("cub_file->c_y %d\n", (int)cub_file->c_y);
-		// printf("cub_file->c_x %d\n", (int)cub_file->c_x);
-		// printf("c_y %d\n", (int)c_y);
-		// printf("c_x %d\n", (int)c_x);
-		// printf("c_y / SCALE %d\n", (int)c_y / SCALE);
-		// printf("c_x / SCLAE %d\n", (int)c_x / SCALE);
-			if (cub_file->sprites[i][2] == 0)
-			{
-				// printf("i %d\n", i);
-				// printf("c_y %d, [i][0] %d\n", (int)c_y / SCALE, cub_file->sprites[i][0]);
-				// printf("c_x %d, [i][1] %d\n", (int)c_x / SCALE, cub_file->sprites[i][1]);
-				cub_file->sprites[i][2] = 1;
-				return (0);
-			}
-			else
-				return (-1);
-		}
-		i++;
-
-	}
-	return (-1);
-}
-
-void				match_sprites_as_not_drawn(t_parse *cub_file)
-{
-	int i = 0;
-	while (i < cub_file->num_of_sprites)
-	{
-		cub_file->sprites[i][2] = 0;
-		i++;
-	}
 }
 
 void remove_sprite_from_map2d(t_parse *cub_file)

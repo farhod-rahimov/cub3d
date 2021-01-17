@@ -176,7 +176,7 @@ int					convert_map(t_parse **cub_file)
 	if (!((*cub_file)->map2d = (char **)malloc(sizeof(char *) * (((*cub_file)->map_y * SCALE) + 1))))
 		return (-1); // malloc error
 
-	while (y < (*cub_file)->map_y * SCALE)
+	while (y < (*cub_file)->map_y * SCALE) // (наверное здесь (map_y - 1) * SCALE, потому что map_y ведет отсчет от 1)
 	{
 		if (!((*cub_file)->map2d[y] = (char *)malloc(sizeof(char) * ((*cub_file)->map_x * SCALE + 1))))
 			return (-1);
@@ -225,11 +225,66 @@ int					convert_map(t_parse **cub_file)
     // printf("map_x %d\n", (*cub_file)->map_x);
     // printf("map_y %d\n", (*cub_file)->map_y);
 
-	convert_map_NWSE(cub_file);
+	// convert_map_NWSE(cub_file);
+	if (get_coordinate_of_spites(*cub_file) == -1)
+		return (-1);
 	return (0);
 }
 
+int					get_coordinate_of_spites(t_parse *cub_file)
+{
+	int y = 0;
+	int x = 0;
+	int	i = 0;
 
+	cub_file->num_of_sprites = count_sprites(cub_file->map);
+	if (!(cub_file->sprites = (int **)malloc(sizeof(int *) * cub_file->num_of_sprites)))
+		return (-1); // print malloc error
+	while (y < cub_file->map_y * SCALE && i < cub_file->num_of_sprites)
+	{
+		while (x < cub_file->map_x * SCALE)
+		{
+			if (cub_file->map2d[y][x] == '2')
+			{
+				if (!(cub_file->sprites[i] = (int *)malloc(sizeof(int) * 3)))
+					return (-1); // print malloc error
+				cub_file->sprites[i][0] = y / SCALE; // y
+				cub_file->sprites[i][1] = x / SCALE; // x
+				cub_file->sprites[i][2] = 0; // drawn (1) or not drawn (0)
+				i++;
+			}
+			x += SCALE;
+		}
+		x = 0;
+		y += SCALE;
+		printf("y %d. x %d, i %d\n", y, x, i);
+		printf("map_y x SCALE %d\n", cub_file->map_y * SCALE);
+	}
+
+	i = 0; // printf
+	while (i < cub_file->num_of_sprites)
+	{
+		printf("[i][0] = %d, [i][1] = %d, [i][2] = %d\n", cub_file->sprites[i][0], cub_file->sprites[i][1], cub_file->sprites[i][2]);
+		i++;
+	}
+	printf("--------\n\n");
+
+	return (0);
+}
+
+int 		count_sprites(char *map)
+{
+	int i = 0;
+	int num_of_sprites = 0;
+
+	while (map[i])
+	{
+		if (map[i] == '2')
+			num_of_sprites++;
+		i++;
+	}
+	return (num_of_sprites);
+}
 void					convert_map_NWSE(t_parse **cub_file)
 {
 	int i;
@@ -304,7 +359,7 @@ void					convert_map_NWSE(t_parse **cub_file)
 	// 		{
 	// 			if ((*cub_file)->map2d[y][x] == '0' && (*cub_file)->map2d[y][x - 1] == '8' && (*cub_file)->map2d[y][x - 2] == '1')
 	// 			{
-	// 				while (x - 2 > 0 && (*cub_file)->map2d[y][x - 2] != '0' && (*cub_file)->map2d[y][x - 2] != '2')
+	// 				while (x - 2 >= 0 && (*cub_file)->map2d[y][x - 2] != '0' && (*cub_file)->map2d[y][x - 2] != '2')
 	// 				{
 	// 					if ((*cub_file)->map2d[y][x - 2] == '1')
 	// 					(*cub_file)->map2d[y][x-- - 2] = '8';
@@ -317,11 +372,11 @@ void					convert_map_NWSE(t_parse **cub_file)
 	// 	y++;
 	// }
 
-	printf("\n87converted_map NWSE\n");
-	y = 0;
-	while (y <= (*cub_file)->map_y * SCALE)
-	{
-		printf("%s\n", (*cub_file)->map2d[y]);
-		y++;
-	}
+	// printf("\n87converted_map NWSE\n");
+	// y = 0;
+	// while (y <= (*cub_file)->map_y * SCALE)
+	// {
+	// 	printf("%s\n", (*cub_file)->map2d[y]);
+	// 	y++;
+	// }
 }

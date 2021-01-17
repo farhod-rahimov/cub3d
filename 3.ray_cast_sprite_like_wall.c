@@ -156,9 +156,7 @@ int			ray_cast(t_parse *cub_file)
 int					ray_cast_sprites(t_parse *cub_file)
 {	long double tmp_len_of_c;
 	long double tmp_len_of_c_nachalo;
-	long double tmp_len_of_c_nachalo2;
 	int tmp_x = 0;
-	int tmp_x2 = 0;
 	cub_file->FOV = cub_file->player_a - (PI / 6);
 
 	long double scale_texture_x;
@@ -168,41 +166,26 @@ int					ray_cast_sprites(t_parse *cub_file)
 	char *color;
 	int	color_int;
 	int i_texture_y = 0;
-	int i_texture_x = 0;
 	
 	int num_of_sprites = 0;
 	scale_texture_x = (float)cub_file->width_sprite / (float)SCALE;
-	stolbec_x = 0;
 	cub_file->addr_text = mlx_get_data_addr(cub_file->img_sprite, &cub_file->bits_per_pixel_text, &cub_file->line_length_text, &cub_file->endian_text);
 	// int quququ = 0;
-	// char **tmp_map2d;
-	// if ((tmp_map2d = ft_copy_map2d(cub_file->map2d, cub_file)) == NULL)
-	// 	return (-1);
-	while (cub_file->FOV <= cub_file->player_a + (PI / 6 && tmp_x < cub_file->Rx - 1) /*&& i <= cub_file->width_sprite*/ /*&& cub_file->sprite_start < cub_file->sprite_end*/)
+	while (cub_file->FOV <= cub_file->player_a + (PI / 6) /*&& i <= cub_file->width_sprite*/ /*&& cub_file->sprite_start < cub_file->sprite_end*/)
 	{
-		tmp_x2 = tmp_x;
 		num_of_sprites = check_num_of_sprites(cub_file);
+		// if (num_of_sprites > 1)
+		// 	printf("num_of_sprites %d\n", num_of_sprites);
 		while (num_of_sprites > 0)
 		{
+			// printf ("num_of-sprites %d\n", num_of_sprites);
 			if (get_n_sprite(cub_file, num_of_sprites) == 0)
 				break ;
-			printf("num_of_sprites %d\n", num_of_sprites);
-			printf("FOV %Lf\n", cub_file->FOV * 180 / PI);
-			printf("side %c\n", cub_file->side);
-			exit(1);
-			if (check_if_sprite_is_drawn(cub_file) == -1)
-			{
-				num_of_sprites--;
-				continue;
-			}
+			// printf("len_of_c %Lf\n", cub_file->len_of_c);
+			if (cub_file->len_of_c == cub_file->Rx * -10 || cub_file->len_of_c == cub_file->Rx * 10)
+				break ;
 			if (cub_file->len_of_c < 0)
 				cub_file->len_of_c *= -1;
-			printf("c_y / SCALE %d\n", (int)cub_file->c_y / SCALE);
-			printf("c_x / SCLAE %d\n", (int)cub_file->c_x / SCALE);
-			// remove_sprite_from_map2d(cub_file);
-			// printf("c_y %d, c_x %d\n", (int)cub_file->c_y, (int)cub_file->c_x);
-			// printf("c_y / SCALE %d, c_x / SCALE %d\n--------------\n", (int)cub_file->c_y / SCALE, (int)cub_file->c_x / SCALE);
-			// break ;
 			tmp_len_of_c = cub_file->len_of_c / SCALE;
 			tmp_len_of_c = cub_file->Ry / (tmp_len_of_c * cosl(cub_file->player_a - cub_file->FOV));
 			tmp_len_of_c_nachalo = cub_file->Ry / 2 - tmp_len_of_c / 2;
@@ -211,132 +194,33 @@ int					ray_cast_sprites(t_parse *cub_file)
 				tmp_len_of_c = cub_file->Ry;
 				tmp_len_of_c_nachalo = 0;
 			}
-			tmp_len_of_c_nachalo2 = tmp_len_of_c_nachalo;
 			// printf("tmp_len_of_c_nachalo %Lf\n", tmp_len_of_c_nachalo);
 			scale_texture_y = cub_file->height_sprite / tmp_len_of_c;
 			// printf("scale_text_y %Lf\n", scale_texture_y);
-			// stolbec_x = ((int)cub_file->c_x % SCALE) * scale_texture_x;
+			if (cub_file->side == 'N' || cub_file->side == 'S')
+				stolbec_x = ((int)cub_file->c_x % SCALE) * scale_texture_x;
+			else if (cub_file->side == 'E' || cub_file->side == 'W')
+				stolbec_x = ((int)cub_file->c_y % SCALE) * scale_texture_x;
 			// stolbec_x = (tmp_x % cub_file->width_sprite);
-			// stolbec_x = ((int)cub_file->c_x % SCALE) * scale_texture_x;
-			stolbec_x = (int)scale_texture_x;
-			while (stolbec_x < cub_file->width_sprite && tmp_x < cub_file->Rx - 1)
+			while ((stolbec_y < cub_file->height_sprite) && (tmp_len_of_c_nachalo < (cub_file->Ry / 2 + tmp_len_of_c / 2) - 1))
 			{
-				while ((stolbec_y < cub_file->height_sprite) && (tmp_len_of_c_nachalo < (cub_file->Ry / 2 + tmp_len_of_c / 2) - 1))
-				{
-					stolbec_y = (int)(scale_texture_y * i_texture_y++);
-					color = cub_file->addr_text + (stolbec_x * 4 + stolbec_y * cub_file->line_length_text);
-					color_int = ((unsigned char)color[2] << 16) + ((unsigned char)color[1] << 8) + (unsigned char)color[0];
-					if (color_int != 0x000000)
-						my_mlx_pixel_put(cub_file, tmp_x, (int)tmp_len_of_c_nachalo, color_int);
-					// my_mlx_pixel_put(cub_file, tmp_x, (int)tmp_len_of_c_nachalo, 0x000000);
-					tmp_len_of_c_nachalo += 1;
-					// printf("quququ %d\n", quququ++);
-				}
-				stolbec_y = 0;
-				i_texture_y = 0;
-				stolbec_x = scale_texture_x * ++i_texture_x;
-				tmp_x++;
-				tmp_len_of_c_nachalo = tmp_len_of_c_nachalo2;
+				stolbec_y = (int)(scale_texture_y * i_texture_y++);
+				color = cub_file->addr_text + (stolbec_x * 4 + stolbec_y * cub_file->line_length_text);
+				color_int = ((unsigned char)color[2] << 16) + ((unsigned char)color[1] << 8) + (unsigned char)color[0];
+				// if (color_int != 0x000000)
+					my_mlx_pixel_put(cub_file, tmp_x, tmp_len_of_c_nachalo, color_int);
+				// my_mlx_pixel_put(cub_file, tmp_x, (int)tmp_len_of_c_nachalo, 0x000000);
+				tmp_len_of_c_nachalo += 1;
 			}
-			tmp_x = tmp_x2;
 			num_of_sprites--;
+			stolbec_y = 0;
+			i_texture_y = 0;
 		}
 		tmp_x++;
 		cub_file->FOV += (PI / 3) / cub_file->Rx;
 	}
-	match_sprites_as_not_drawn(cub_file);
-	// ft_free_map2d(cub_file->map2d, cub_file);
-	// if ((cub_file->map2d = ft_copy_map2d(tmp_map2d, cub_file)) == NULL)
-	// 	return (-1);
-	// ft_free_map2d(tmp_map2d, cub_file);
+
 	return (0);
-}
-
-int check_if_sprite_is_drawn(t_parse *cub_file)
-{
-	long double c_x = cub_file->c_x;
-	long double c_y = cub_file->c_y;
-	int i = 0;
-
-	// printf("cub_file->c_y %d\n", (int)cub_file->c_y);
-	// printf("cub_file->c_x %d\n", (int)cub_file->c_x);
-	// printf("c_y %d\n", (int)c_y);
-	// printf("c_x %d\n", (int)c_x);
-	// printf("[i][0] %d, c_y / SCALE %d\n", cub_file->sprites[i][0], (int)(c_y / SCALE));
-	// printf("[i][1] %d, c_x / SCALE %d\n\n", cub_file->sprites[i][1], (int)(c_x / SCALE));
-	while (i < cub_file->num_of_sprites)
-	{
-		if ((int)c_y / SCALE == cub_file->sprites[i][0]
-		&& (int)c_x / SCALE  ==  cub_file->sprites[i][1])
-		{
-		// printf("cub_file->c_y %d\n", (int)cub_file->c_y);
-		// printf("cub_file->c_x %d\n", (int)cub_file->c_x);
-		// printf("c_y %d\n", (int)c_y);
-		// printf("c_x %d\n", (int)c_x);
-		// printf("c_y / SCALE %d\n", (int)c_y / SCALE);
-		// printf("c_x / SCLAE %d\n", (int)c_x / SCALE);
-			if (cub_file->sprites[i][2] == 0)
-			{
-				// printf("i %d\n", i);
-				// printf("c_y %d, [i][0] %d\n", (int)c_y / SCALE, cub_file->sprites[i][0]);
-				// printf("c_x %d, [i][1] %d\n", (int)c_x / SCALE, cub_file->sprites[i][1]);
-				cub_file->sprites[i][2] = 1;
-				return (0);
-			}
-			else
-				return (-1);
-		}
-		i++;
-
-	}
-	return (-1);
-}
-
-void				match_sprites_as_not_drawn(t_parse *cub_file)
-{
-	int i = 0;
-	while (i < cub_file->num_of_sprites)
-	{
-		cub_file->sprites[i][2] = 0;
-		i++;
-	}
-}
-
-void remove_sprite_from_map2d(t_parse *cub_file)
-{
-	int x;
-	int y;
-
-	// x = 0;
-	// y = 0;
-	// printf("map2d before removing sprite\n");
-	// while (y < cub_file->map_y * SCALE)
-	// {
-	// 	printf("%s\n", cub_file->map2d[y]);
-	// 	y++;
-	// }
-
-	x = (int)cub_file->c_x / SCALE * SCALE;
-	y = (int)cub_file->c_y / SCALE * SCALE;
-
-	while (y < ((int)cub_file->c_y / SCALE * SCALE) + SCALE)
-	{
-		while (x < ((int)cub_file->c_x / SCALE * SCALE) + SCALE)
-		{
-			cub_file->map2d[y][x] = '0';
-			x++;
-		}
-		x = (int)cub_file->c_x / SCALE * SCALE;
-		y++;
-	}
-	
-	// y = 0;
-	// printf("map2d after removing sprite\n");
-	// while (y < cub_file->map_y * SCALE)
-	// {
-	// 	printf("%s\n", cub_file->map2d[y]);
-	// 	y++;
-	// }
 }
 
 // int					ray_cast_sprites(t_parse *cub_file)

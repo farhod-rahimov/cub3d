@@ -50,8 +50,8 @@ void draw_map_2d(t_parse *cub_file, int x, int y)
 
 	while (a < 20) // draw player_a
 	{
-		cub_file->c_x = cub_file->player_x + a * cosf(cub_file->player_a);
-		cub_file->c_y = cub_file->player_y + a * sinf(cub_file->player_a);
+		cub_file->c_x = cub_file->player_x + a * cosl(cub_file->player_a);
+		cub_file->c_y = cub_file->player_y + a * sinl(cub_file->player_a);
 		my_mlx_pixel_put(cub_file, (int)cub_file->c_x, (int)cub_file->c_y, 0x00ff00);
 		a++;
 	}  ///// DELETE
@@ -60,6 +60,8 @@ void draw_map_2d(t_parse *cub_file, int x, int y)
 	cub_file->len_of_c = 0;
 	cub_file->FOV = cub_file->player_a - (PI / 6);
 	// cub_file->FOV = cub_file->player_a;
+	static char storona;
+	// static int iaa;
 
 	while (cub_file->FOV <= cub_file->player_a + (PI / 6)) // hit_y
 	{
@@ -72,54 +74,225 @@ void draw_map_2d(t_parse *cub_file, int x, int y)
 		{
 			if ((int)(cub_file->FOV * 180 / PI) % 360 >= 0 && (int)(cub_file->FOV * 180 / PI) % 360 < 90) // lower right
 			{
-				if (check_lower_side(cub_file, 0) < check_right_side(cub_file, 0))
+				if (check_lower_side_walls(cub_file, 0) <= check_right_side_walls(cub_file, 0))
 				{
-					check_lower_side(cub_file, 0);
-					draw_lower_side(cub_file);
+					if (storona == 'E')
+					{
+						check_lower_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							check_right_side_walls(cub_file, 0);
+							draw_right_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'S';
+							draw_lower_side_walls(cub_file);
+						}
+					}
+					else 
+					{
+						check_lower_side_walls(cub_file, 0);
+						storona = 'S';
+						draw_lower_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_right_side(cub_file, 0); 
-					draw_right_side(cub_file);
+					if (storona == 'S')
+					{
+						check_right_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > SCALE / 3)
+							{
+								check_right_side_walls(cub_file, 0); 
+								storona = 'E';
+								draw_right_side_walls(cub_file);
+							}
+							else
+							{
+								check_lower_side_walls(cub_file, 0);
+								draw_lower_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'E';
+							draw_right_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_right_side_walls(cub_file, 0); 
+						storona = 'E';
+						draw_right_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 90 && (int)(cub_file->FOV * 180 / PI) % 360 < 180) // lower left
 			{
-				if (check_lower_side(cub_file, 0) < check_left_side(cub_file, 0) * -1)
+				if (check_lower_side_walls(cub_file, 0) <= check_left_side_walls(cub_file, 0) * -1)
 				{
-					check_lower_side(cub_file, 0);
-					draw_lower_side(cub_file);
+					if (storona == 'W')
+					{
+						check_lower_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > SCALE / 3)
+							{
+								check_lower_side_walls(cub_file, 0);
+								storona = 'S';
+								draw_lower_side_walls(cub_file);
+							}
+							else
+							{
+								check_left_side_walls(cub_file, 0); 
+								draw_left_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'S';
+							draw_lower_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_lower_side_walls(cub_file, 0);
+						storona = 'S';
+						draw_lower_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_left_side(cub_file, 0); 
-					draw_left_side(cub_file);
+					if (storona == 'S')
+					{
+						check_left_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_lower_side_walls(cub_file, 0);
+							draw_lower_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'W';
+							draw_left_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_left_side_walls(cub_file, 0); 
+						storona = 'W';
+						draw_left_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 180 && (int)(cub_file->FOV * 180 / PI) % 360 < 270) // upper left
 			{
-				if (check_upper_side(cub_file, 0) * -1 < check_left_side(cub_file, 0) * -1)
+				if (check_upper_side_walls(cub_file, 0) * -1 <= check_left_side_walls(cub_file, 0) * -1) // было < 
 				{
-					check_upper_side(cub_file, 0);
-					draw_upper_side(cub_file);
+					if (storona == 'W')
+					{
+						check_upper_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_left_side_walls(cub_file, 0); 
+							draw_left_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'N';
+							draw_upper_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_upper_side_walls(cub_file, 0);
+						storona = 'N';
+						draw_upper_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_left_side(cub_file, 0); 
-					draw_left_side(cub_file);
+					if (storona == 'N')
+					{
+						check_left_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_upper_side_walls(cub_file, 0);
+							draw_upper_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'W';
+							draw_left_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_left_side_walls(cub_file, 0); 
+						storona = 'W';
+						draw_left_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 >= 270 && (int)(cub_file->FOV * 180 / PI) % 360 < 360) // upper right
 			{
-				if (check_upper_side(cub_file, 0) * -1 < check_right_side(cub_file, 0))
+				if (check_upper_side_walls(cub_file, 0) * -1 <= check_right_side_walls(cub_file, 0))
 				{
-					check_upper_side(cub_file, 0);
-					draw_upper_side(cub_file);
+					if (storona == 'E')
+					{
+						check_upper_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > SCALE / 3)
+							{
+								check_upper_side_walls(cub_file, 0); 
+								storona = 'N';
+								draw_upper_side_walls(cub_file);
+							}
+							else
+							{
+								check_right_side_walls(cub_file, 0); 
+								draw_right_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'N';
+							draw_upper_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_upper_side_walls(cub_file, 0);
+						storona = 'N';
+						draw_upper_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					cub_file->len_of_c = check_right_side(cub_file, 0); 
-					draw_right_side(cub_file);
+					if (storona == 'N')
+					{
+						check_right_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							check_upper_side_walls(cub_file, 0);
+							draw_upper_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'E';
+							draw_right_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_right_side_walls(cub_file, 0); 
+						storona = 'E';
+						draw_right_side_walls(cub_file);
+					}
 				}
 			}
 		}
@@ -127,54 +300,225 @@ void draw_map_2d(t_parse *cub_file, int x, int y)
 		{
 			if ((int)(cub_file->FOV * 180 / PI) % 360 <= 0 && (int)(cub_file->FOV * 180 / PI) % 360 > -90) // upper right
 			{
-				if (check_upper_side(cub_file, 0) * -1 < check_right_side(cub_file, 0))
+				if (check_upper_side_walls(cub_file, 0) * -1 <= check_right_side_walls(cub_file, 0))
 				{
-					check_upper_side(cub_file, 0);
-					draw_upper_side(cub_file);
+					if (storona == 'E')
+					{
+						check_upper_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > SCALE / 3)
+							{
+								check_upper_side_walls(cub_file, 0); 
+								storona = 'N';
+								draw_upper_side_walls(cub_file);
+							}
+							else
+							{
+								check_right_side_walls(cub_file, 0); 
+								draw_right_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'N';
+							draw_upper_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_upper_side_walls(cub_file, 0);
+						storona = 'N';
+						draw_upper_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_right_side(cub_file, 0); 
-					draw_right_side(cub_file);
+					if (storona == 'N')
+					{
+						check_right_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							check_upper_side_walls(cub_file, 0);
+							draw_upper_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'E';
+							draw_right_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_right_side_walls(cub_file, 0); 
+						storona = 'E';
+						draw_right_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -90 && (int)(cub_file->FOV * 180 / PI) % 360 > -180) // upper left
 			{
-				if (check_upper_side(cub_file, 0) * -1 < check_left_side(cub_file, 0) * -1)
+				if (check_upper_side_walls(cub_file, 0) * -1 <= check_left_side_walls(cub_file, 0) * -1) // было < 
 				{
-					check_upper_side(cub_file, 0);
-					draw_upper_side(cub_file);
+					if (storona == 'W')
+					{
+						check_upper_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_left_side_walls(cub_file, 0); 
+							draw_left_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'N';
+							draw_upper_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_upper_side_walls(cub_file, 0);
+						storona = 'N';
+						draw_upper_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_left_side(cub_file, 0); 
-					draw_left_side(cub_file);
+					if (storona == 'N')
+					{
+						check_left_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 0 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_upper_side_walls(cub_file, 0);
+							draw_upper_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'W';
+							draw_left_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_left_side_walls(cub_file, 0); 
+						storona = 'W';
+						draw_left_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -180 && (int)(cub_file->FOV * 180 / PI) % 360 > -270) // lower left
 			{
-				if (check_lower_side(cub_file, 0) < check_left_side(cub_file, 0) * -1)
+				if (check_lower_side_walls(cub_file, 0) <= check_left_side_walls(cub_file, 0) * -1)
 				{
-					check_lower_side(cub_file, 0);
-					draw_lower_side(cub_file);
+					if (storona == 'W')
+					{
+						check_lower_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > SCALE / 3)
+							{
+								check_lower_side_walls(cub_file, 0);
+								storona = 'S';
+								draw_lower_side_walls(cub_file);
+							}
+							else
+							{
+								check_left_side_walls(cub_file, 0); 
+								draw_left_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'S';
+							draw_lower_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_lower_side_walls(cub_file, 0);
+						storona = 'S';
+						draw_lower_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_left_side(cub_file, 0); 
-					draw_left_side(cub_file);
+					if (storona == 'S')
+					{
+						check_left_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 0)
+						{
+							check_lower_side_walls(cub_file, 0);
+							draw_lower_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'W';
+							draw_left_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_left_side_walls(cub_file, 0); 
+						storona = 'W';
+						draw_left_side_walls(cub_file);
+					}
 				}
 			}
 			else if ((int)(cub_file->FOV * 180 / PI) % 360 <= -270 && (int)(cub_file->FOV * 180 / PI) % 360 > -360) // lower right
 			{
-				if (check_lower_side(cub_file, 0) < check_right_side(cub_file, 0))
+				if (check_lower_side_walls(cub_file, 0) <= check_right_side_walls(cub_file, 0))
 				{
-					check_lower_side(cub_file, 0);
-					draw_lower_side(cub_file);
+					if (storona == 'E')
+					{
+						check_lower_side_walls(cub_file, 0);
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							check_right_side_walls(cub_file, 0);
+							draw_right_side_walls(cub_file);
+						}
+						else
+						{
+							storona = 'S';
+							draw_lower_side_walls(cub_file);
+						}
+					}
+					else 
+					{
+						check_lower_side_walls(cub_file, 0);
+						storona = 'S';
+						draw_lower_side_walls(cub_file);
+					}
 				}
 				else
 				{
-					check_right_side(cub_file, 0); 
-					draw_right_side(cub_file);
+					if (storona == 'S')
+					{
+						check_right_side_walls(cub_file, 0); 
+						if (((int)cub_file->c_y + 1) % SCALE == 1 && ((int)cub_file->c_x + 1) % SCALE == 1)
+						{
+							if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > SCALE / 3)
+							{
+								check_right_side_walls(cub_file, 0); 
+								storona = 'E';
+								draw_right_side_walls(cub_file);
+							}
+							else
+							{
+								check_lower_side_walls(cub_file, 0);
+								draw_lower_side_walls(cub_file);
+							}
+						}
+						else
+						{
+							storona = 'E';
+							draw_right_side_walls(cub_file);
+						}
+					}
+					else
+					{
+						check_right_side_walls(cub_file, 0); 
+						storona = 'E';
+						draw_right_side_walls(cub_file);
+					}
 				}
 			}
 		}

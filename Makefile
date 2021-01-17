@@ -6,7 +6,7 @@
 #    By: btammara <btammara@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/14 11:36:07 by btammara          #+#    #+#              #
-#    Updated: 2021/01/07 11:51:37 by btammara         ###   ########.fr        #
+#    Updated: 2021/01/17 15:17:28 by btammara         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,13 @@ SRCS	=	./get_next_line/get_next_line.c \
 			./cub3d_utils/ft_substr.c \
 			./move_2d.c \
 			./ray_cast.c \
-			./check_sides_for_raycasting.c \
+			./ft_cp_and_free_map2d.c \
+			./check_sides_walls_for_raycasting.c \
+			./check_sides_sprites_for_raycasting.c \
 			./draw_lines_map_2d/draw_map_2d.c \
-			./draw_lines_map_2d/check_sides.c \
-			./draw_lines_map_2d/draw_sides.c \
+			./draw_lines_map_2d/check_sides_walls.c \
+			./check_sides_sprites.c \
+			./draw_lines_map_2d/draw_sides_walls.c \
 
 OBJS	= 	$(SRCS:.c=.o)
 

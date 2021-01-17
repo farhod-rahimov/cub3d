@@ -6,7 +6,7 @@
 /*   By: btammara <btammara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:39:46 by btammara          #+#    #+#             */
-/*   Updated: 2021/01/08 08:50:41 by btammara         ###   ########.fr       */
+/*   Updated: 2021/01/17 17:28:35 by btammara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@
 # include <fcntl.h>
 # include <math.h>
 # include "./get_next_line/get_next_line.h"
-#define SCALE 5
-#define PI 3.141526535
-
+#define SCALE 500
+#define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091
 typedef	struct		s_parse
 {
     char    *p_file;
@@ -46,18 +45,28 @@ typedef	struct		s_parse
 	char	**map2d; // free! every string, then free *
 	int		player_x;
 	int		player_y;
-	float	player_a;
-	float	FOV;
-	float	len_of_c;
-	// float	c_x;
-	int		c_x;
-	float	c_y;
+	long double	player_a;
+	long double	FOV;
+	long double	len_of_c;
+	long double	c_x;
+	// int		c_x;
+	long double	c_y;
 	// int		c_y;
 	char	p_of_view;
+
+	char	side;
  
+	int			sprite_start;
+	long double	sprite_len_of_c;
+	int			sprite_end;
+	int			**sprites;
+	int			num_of_sprites;
+
     void        *mlx;
     void        *win;
     void        *img;
+
+	int			height;
 
     void        *img_north;
 	int			width_north;
@@ -115,6 +124,8 @@ int					get_ceiling_color(t_parse **cub_file, int i);
 int					get_map(t_parse **cub_file, int i);
 
 
+int					get_coordinate_of_spites(t_parse *cub_file);
+int 				count_sprites(char *map);
 int					convert_map(t_parse **cub_file);
 void				convert_map_NWSE(t_parse **cub_file);
 int					check_if_map_is_last(t_parse **cub_file);
@@ -125,16 +136,26 @@ int					check_if_ceiling_color_is_ok(t_parse **cub_file);
 int					check_if_map_is_ok(t_parse **cub_file);
 void				check_closed_spaces(t_parse *cub_file);
 
-int					check_upper_side(t_parse *cub_file, int i);
-int					check_lower_side(t_parse *cub_file, int i);
-int					check_right_side(t_parse *cub_file, int i);
-int					check_left_side(t_parse *cub_file, int i);
+long double				check_upper_side_walls(t_parse *cub_file, int i);
+long double				check_lower_side_walls(t_parse *cub_file, int i);
+long double				check_right_side_walls(t_parse *cub_file, int i);
+long double				check_left_side_walls(t_parse *cub_file, int i);
+
+long double				check_upper_side_sprites(t_parse *cub_file, int i);
+long double				check_lower_side_sprites(t_parse *cub_file, int i);
+long double				check_right_side_sprites(t_parse *cub_file, int i);
+long double				check_left_side_sprites(t_parse *cub_file, int i);
+
+long double 			check_upper_side_n_sprite(t_parse *cub_file, int i, int n_sprite);
+long double 			check_lower_side_n_sprite(t_parse *cub_file, int i, int n_sprite);
+long double 			check_right_side_n_sprite(t_parse *cub_file, int i, int n_sprite);
+long double 			check_left_side_n_sprite(t_parse *cub_file, int i, int n_sprite);
 
 void				draw_map_2d(t_parse *cub_file, int x, int y);
-void				draw_upper_side(t_parse *cub_file);
-void				draw_lower_side(t_parse *cub_file);
-void				draw_right_side(t_parse *cub_file);
-void				draw_left_side(t_parse *cub_file);
+void				draw_upper_side_walls(t_parse *cub_file);
+void				draw_lower_side_walls(t_parse *cub_file);
+void				draw_right_side_walls(t_parse *cub_file);
+void				draw_left_side_walls(t_parse *cub_file);
 
 int					move2d(t_parse *cub_file);
 int					get_coordinate_of_player(t_parse *cub_file);
@@ -142,7 +163,16 @@ int					get_player_point_of_view(t_parse *cub_file);
 int					key_hook(int keycode, t_parse *cub_file);
 
 int					ray_cast(t_parse *cub_file);
-int					check_sides_for_raycsting(t_parse *cub_file);
+int					ray_cast_sprites(t_parse *cub_file);
+int					check_if_sprite_is_drawn(t_parse *cub_file);
+void				match_sprites_as_not_drawn(t_parse *cub_file);
+void 				remove_sprite_from_map2d(t_parse *cub_file);
+char 				**ft_copy_map2d(char **map2d, t_parse *cub_file);
+void 				ft_free_map2d(char **map2d, t_parse *cub_file);
+char				check_sides_walls_for_raycsting(t_parse *cub_file);
+int					check_sides_sprites_for_raycasting(t_parse *cub_file);
+int					check_num_of_sprites(t_parse *cub_file);
+int					get_n_sprite(t_parse *cub_file, int n_sprite);
 
 void	            my_mlx_pixel_put(t_parse *data, int x, int y, int color);
 int					get_textures(t_parse *cub_file);

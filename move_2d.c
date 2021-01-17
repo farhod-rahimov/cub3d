@@ -56,7 +56,11 @@ int			get_player_point_of_view(t_parse *cub_file)
 	// cub_file->player_a = -PI; // east
 	// cub_file->player_a = -PI / 4;
 	// cub_file->player_a = 0;
-	cub_file->player_a = 45 * PI / 180;
+	cub_file->player_a = -90 * PI / 180;
+	// cub_file->player_a = -315 * PI / 180;
+	// cub_file->player_a = -135 * PI / 180;
+	// cub_file->player_a = 225 * PI / 180;
+	// cub_file->player_a = -142.500674 / 180 * PI;
 	// cub_file->player_a = 3 * PI / 2 - PI / 4;
 	// cub_file->player_a = PI/2;
 	return (0);
@@ -168,7 +172,7 @@ void	draw(t_parse *cub_file)
 	&cub_file->line_length, &cub_file->endian);
 	draw_sky_and_floor(cub_file, 0, 0);
 	ray_cast(cub_file);
-	draw_map_2d(cub_file, 0, 0);
+	// draw_map_2d(cub_file, 0, 0);
 	// printf("player_a = %f, 0cub_file->FOV %f, 1cub_file->FOV %f\n\n", cub_file->player_a * 180 / PI, (cub_file->player_a - (PI / 6)) * 180 / PI, (cub_file->player_a + (PI / 6)) * 180 / PI);
     mlx_put_image_to_window(cub_file->mlx, cub_file->win, cub_file->img, 0, 0);
 }
@@ -222,14 +226,14 @@ int             key_hook(int keycode, t_parse *cub_file)
 		// printf("1 player_y = %d, player_x = %d, map2d[][] %c\n", *player_y, *player_x, cub_file->map2d[*player_y][*player_x]);
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		if (cub_file->player_y > 0 && cub_file->map2d
-		[*player_y + (int)(1 * sinf(cub_file->player_a))][*player_x + (int)(1 * cosf(cub_file->player_a))] == '0')
+		[*player_y + (int)(1 * sinl(cub_file->player_a))][*player_x + (int)(1 * cosl(cub_file->player_a))] == '0')
 		{
 			step = 1;
-			while (cub_file->map2d[*player_y + (int)(step * sinf(cub_file->player_a))][*player_x + (int)(step * cosf(cub_file->player_a))] == '0'
-			&& step <= 10)
+			while (cub_file->map2d[*player_y + (int)(step * sinl(cub_file->player_a))][*player_x + (int)(step * cosl(cub_file->player_a))] == '0'
+			&& step <= 50)
 				step++;
-		 	*player_y = *player_y + (int)(--step * sinf(cub_file->player_a));
-		 	*player_x = *player_x + (int)(step * cosf(cub_file->player_a));
+		 	*player_y = *player_y + (int)(--step * sinl(cub_file->player_a));
+		 	*player_x = *player_x + (int)(step * cosl(cub_file->player_a));
 		}
 		draw(cub_file);
 	}
@@ -238,15 +242,15 @@ int             key_hook(int keycode, t_parse *cub_file)
     	// printf("You have pressed the key 'A'!\n");
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		if (cub_file->player_y > 0 && cub_file->map2d
-		[*player_y - (int)(1 * cosf(cub_file->player_a))][*player_x + (int)(1 * sinf(cub_file->player_a))] == '0')
+		[*player_y - (int)(1 * cosl(cub_file->player_a))][*player_x + (int)(1 * sinl(cub_file->player_a))] == '0')
 		{
 			step = 1;
-			while (cub_file->map2d[*player_y - (int)(step * cosf(cub_file->player_a))][*player_x + (int)(step * sinf(cub_file->player_a))] == '0'
-			&& step <= 10)
+			while (cub_file->map2d[*player_y - (int)(step * cosl(cub_file->player_a))][*player_x + (int)(step * sinl(cub_file->player_a))] == '0'
+			&& step <= 50)
 				step++;
 			cub_file->map2d[*player_y][*player_x] = '0';
-		 	*player_y = *player_y - (int)(--step * cosf(cub_file->player_a));
-		 	*player_x = *player_x + (int)(step * sinf(cub_file->player_a));
+		 	*player_y = *player_y - (int)(--step * cosl(cub_file->player_a));
+		 	*player_x = *player_x + (int)(step * sinl(cub_file->player_a));
 			//  printf("player_y = %d, player_x = %d, map2d[][] %c\n", *player_y, *player_x, cub_file->map2d[*player_y][*player_x]);
 		}
 		draw(cub_file);
@@ -256,15 +260,15 @@ int             key_hook(int keycode, t_parse *cub_file)
     	// printf("You have pressed the key 'S'!\n");
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		if (cub_file->player_y > 0 && cub_file->map2d
-		[*player_y - (int)(1 * sinf(cub_file->player_a))][*player_x - (int)(1 * cosf(cub_file->player_a))] == '0')
+		[*player_y - (int)(1 * sinl(cub_file->player_a))][*player_x - (int)(1 * cosl(cub_file->player_a))] == '0')
 		{
 			step = 1;
-			while (cub_file->map2d[*player_y - (int)(step * sinf(cub_file->player_a))][*player_x - (int)(step * cosf(cub_file->player_a))] == '0'
-			&& step <= 10)
+			while (cub_file->map2d[*player_y - (int)(step * sinl(cub_file->player_a))][*player_x - (int)(step * cosl(cub_file->player_a))] == '0'
+			&& step <= 50)
 				step++;
 			cub_file->map2d[*player_y][*player_x] = '0';
-		 	*player_y = *player_y - (int)(--step * sinf(cub_file->player_a));
-		 	*player_x = *player_x - (int)(step * cosf(cub_file->player_a));
+		 	*player_y = *player_y - (int)(--step * sinl(cub_file->player_a));
+		 	*player_x = *player_x - (int)(step * cosl(cub_file->player_a));
 			//  printf("player_y = %d, player_x = %d, map2d[][] %c\n", *player_y, *player_x, cub_file->map2d[*player_y][*player_x]);
 		}
 		draw(cub_file);
@@ -274,15 +278,15 @@ int             key_hook(int keycode, t_parse *cub_file)
     	// printf("You have pressed the key 'D'!\n");
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		if (cub_file->player_y > 0 && cub_file->map2d
-		[*player_y + (int)(1 * cosf(cub_file->player_a))][*player_x - (int)(1 * sinf(cub_file->player_a))] == '0')
+		[*player_y + (int)(1 * cosl(cub_file->player_a))][*player_x - (int)(1 * sinl(cub_file->player_a))] == '0')
 		{
 			step = 1;
-			while (cub_file->map2d[*player_y + (int)(step * cosf(cub_file->player_a))][*player_x - (int)(step * sinf(cub_file->player_a))] == '0'
-			&& step <= 10)
+			while (cub_file->map2d[*player_y + (int)(step * cosl(cub_file->player_a))][*player_x - (int)(step * sinl(cub_file->player_a))] == '0'
+			&& step <= 50)
 				step++;
 			cub_file->map2d[*player_y][*player_x] = '0';
-		 	*player_y = *player_y + (int)(--step * cosf(cub_file->player_a));
-		 	*player_x = *player_x - (int)(step * sinf(cub_file->player_a));
+		 	*player_y = *player_y + (int)(--step * cosl(cub_file->player_a));
+		 	*player_x = *player_x - (int)(step * sinl(cub_file->player_a));
 			//  printf("player_y = %d, player_x = %d, map2d[][] %c\n", *player_y, *player_x, cub_file->map2d[*player_y][*player_x]);
 		}
 		draw(cub_file);	
@@ -292,6 +296,7 @@ int             key_hook(int keycode, t_parse *cub_file)
     	// printf("You have pressed the key '<'!\n");
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		cub_file->player_a -= 5 * PI/180;
+		// cub_file->player_a -= (PI / 3) / cub_file->Rx * 5;
 		draw(cub_file);
 
 	}
@@ -300,6 +305,7 @@ int             key_hook(int keycode, t_parse *cub_file)
     	// printf("You have pressed the key '>'!\n");
 		mlx_clear_window(cub_file->mlx, cub_file->win);
 		cub_file->player_a += 5 * PI/180; // 10 градусов
+		// cub_file->player_a += (PI / 3) / cub_file->Rx * 5;
 		draw(cub_file);
 
 	}
