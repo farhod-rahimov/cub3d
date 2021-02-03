@@ -20,11 +20,11 @@ void	check_upper_side_sprites(t_parse **cub_file, int i) // ok
 	while (1)
 	{
 		n = 0;
-		(*cub_file)->len_of_c = ((SCALE * i++ + ((((*cub_file)->player_y % SCALE) + SCALE / 2) + 1)) / sinl((*cub_file)->FOV)); // в OLDUS вместо  + 1 стоит -1
+		(*cub_file)->len_of_c = (((*cub_file)->scale * i++ + ((((*cub_file)->player_y % (*cub_file)->scale) + (*cub_file)->scale / 2) + 1)) / sinl((*cub_file)->FOV)); // в OLDUS вместо  + 1 стоит -1
 		(*cub_file)->c_x = (*cub_file)->player_x - (*cub_file)->len_of_c * cosl((*cub_file)->FOV) + 0.1;
 		(*cub_file)->c_y = (*cub_file)->player_y - (*cub_file)->len_of_c * sinl((*cub_file)->FOV) + 0.1;
 
-		if ((*cub_file)->c_x > (*cub_file)->map_x * SCALE || (*cub_file)->c_y > (*cub_file)->map_y * SCALE ||
+		if ((*cub_file)->c_x > (*cub_file)->map_x * (*cub_file)->scale || (*cub_file)->c_y > (*cub_file)->map_y * (*cub_file)->scale ||
 		(*cub_file)->c_x < 0 || (*cub_file)->c_y < 0)
 			return ;
 
@@ -32,7 +32,7 @@ void	check_upper_side_sprites(t_parse **cub_file, int i) // ok
 		{
 			while (n < (*cub_file)->num_of_sprites)
 			{
-				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / SCALE) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / SCALE)) // scale sprite_x
+				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / (*cub_file)->scale) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / (*cub_file)->scale)) // scale sprite_x
 				{
 					if ((*cub_file)->sprites[n][4] == -1.0) // начало спрайта в ПИ
 					{
@@ -60,11 +60,11 @@ void	check_lower_side_sprites(t_parse **cub_file, int i) // ok
 	while (1)
 	{
 		n = 0;
-		(*cub_file)->len_of_c = (SCALE * i++ + (SCALE - ((*cub_file)->player_y % SCALE) + SCALE / 2)) / sinl((*cub_file)->FOV);
+		(*cub_file)->len_of_c = ((*cub_file)->scale * i++ + ((*cub_file)->scale - ((*cub_file)->player_y % (*cub_file)->scale) + (*cub_file)->scale / 2)) / sinl((*cub_file)->FOV);
 		(*cub_file)->c_x = (*cub_file)->player_x + (*cub_file)->len_of_c * cosl((*cub_file)->FOV) + 0.1;
 		(*cub_file)->c_y = (*cub_file)->player_y + (*cub_file)->len_of_c * sinl((*cub_file)->FOV) + 0.1;
 
-		if ((*cub_file)->c_x > (*cub_file)->map_x * SCALE || (*cub_file)->c_y > (*cub_file)->map_y * SCALE ||
+		if ((*cub_file)->c_x > (*cub_file)->map_x * (*cub_file)->scale || (*cub_file)->c_y > (*cub_file)->map_y * (*cub_file)->scale ||
 		(*cub_file)->c_x < 0 || (*cub_file)->c_y < 0)
 			return ;
 
@@ -72,7 +72,7 @@ void	check_lower_side_sprites(t_parse **cub_file, int i) // ok
 		{
 			while (n < (*cub_file)->num_of_sprites)
 			{
-				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / SCALE) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / SCALE)) // scale sprite_x
+				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / (*cub_file)->scale) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / (*cub_file)->scale)) // scale sprite_x
 				{
 					if ((*cub_file)->sprites[n][4] == -1.0) // начало спрайта в ПИ
 					{
@@ -100,11 +100,11 @@ void	check_left_side_sprites(t_parse **cub_file, int i) // ok
 	while (1)
 	{
 		n = 0;
-		(*cub_file)->len_of_c  = (SCALE * i++ + ((((*cub_file)->player_x % SCALE) + SCALE / 2 ) + 1)) / cosl((*cub_file)->FOV);
+		(*cub_file)->len_of_c  = ((*cub_file)->scale * i++ + ((((*cub_file)->player_x % (*cub_file)->scale) + (*cub_file)->scale / 2 ) + 1)) / cosl((*cub_file)->FOV);
 		(*cub_file)->c_x = (*cub_file)->player_x - (*cub_file)->len_of_c * cosl((*cub_file)->FOV) + 0.1;
 		(*cub_file)->c_y = (*cub_file)->player_y - (*cub_file)->len_of_c * sinl((*cub_file)->FOV) + 0.1;
 		
-		if ((*cub_file)->c_x > (*cub_file)->map_x * SCALE || (*cub_file)->c_y > (*cub_file)->map_y * SCALE ||
+		if ((*cub_file)->c_x > (*cub_file)->map_x * (*cub_file)->scale || (*cub_file)->c_y > (*cub_file)->map_y * (*cub_file)->scale ||
 		(*cub_file)->c_x < 0 || (*cub_file)->c_y < 0)
 			return ;
 
@@ -112,7 +112,7 @@ void	check_left_side_sprites(t_parse **cub_file, int i) // ok
 		{
 			while (n < (*cub_file)->num_of_sprites)
 			{
-				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / SCALE) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / SCALE)) // scale sprite_x
+				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / (*cub_file)->scale) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / (*cub_file)->scale)) // scale sprite_x
 				{
 					if ((*cub_file)->sprites[n][4] == -1.0) // начало спрайта в ПИ
 					{
@@ -140,11 +140,11 @@ void	check_right_side_sprites(t_parse **cub_file, int i) // ok
 	while (1)
 	{	
 		n = 0;
-		(*cub_file)->len_of_c = (SCALE * i++ + (SCALE - ((*cub_file)->player_x % SCALE) + SCALE / 2)) / cosl((*cub_file)->FOV);
+		(*cub_file)->len_of_c = ((*cub_file)->scale * i++ + ((*cub_file)->scale - ((*cub_file)->player_x % (*cub_file)->scale) + (*cub_file)->scale / 2)) / cosl((*cub_file)->FOV);
 		(*cub_file)->c_x = (*cub_file)->player_x + (*cub_file)->len_of_c * cosl((*cub_file)->FOV) + 0.1;
 		(*cub_file)->c_y = (*cub_file)->player_y + (*cub_file)->len_of_c * sinl((*cub_file)->FOV) + 0.1;
 
-		if ((*cub_file)->c_x > (*cub_file)->map_x * SCALE || (*cub_file)->c_y > (*cub_file)->map_y * SCALE ||
+		if ((*cub_file)->c_x > (*cub_file)->map_x * (*cub_file)->scale || (*cub_file)->c_y > (*cub_file)->map_y * (*cub_file)->scale ||
 		(*cub_file)->c_x < 0 || (*cub_file)->c_y < 0)
 			return ;
 
@@ -152,7 +152,7 @@ void	check_right_side_sprites(t_parse **cub_file, int i) // ok
 		{
 			while (n < (*cub_file)->num_of_sprites)
 			{
-				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / SCALE) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / SCALE)) // scale sprite_x
+				if (((int)(*cub_file)->sprites[n][2] == (int)(*cub_file)->c_y / (*cub_file)->scale) && ((int)(*cub_file)->sprites[n][3] == (int)(*cub_file)->c_x / (*cub_file)->scale)) // scale sprite_x
 				{
 					if ((*cub_file)->sprites[n][4] == -1.0) // начало спрайта в ПИ
 					{
@@ -180,7 +180,7 @@ void				complete_data_sprites(t_parse **cub_file) // ok
 	{
 		(*cub_file)->sprites[n][6] = fabsl((*cub_file)->sprites[n][5] - (*cub_file)->sprites[n][4]); // ширина
 		(*cub_file)->sprites[n][0] = (float)(*cub_file)->width_sprite / (*cub_file)->sprites[n][6]; // scale_texture_x
-		(*cub_file)->sprites[n][7] = (*cub_file)->Ry / ((*cub_file)->sprites[n][1] / SCALE); //// len_of_c (высота спрайта по его центру для отрисовки)
+		(*cub_file)->sprites[n][7] = (*cub_file)->Ry / ((*cub_file)->sprites[n][1] / (*cub_file)->scale); //// len_of_c (высота спрайта по его центру для отрисовки)
 		n++;
 	}
 }
@@ -203,14 +203,14 @@ void		ft_draw_sprite(t_parse **cub_file, int n) // ok
 	stolbec_x = fabsl((*cub_file)->sprites[n][5] - (*cub_file)->FOV) * (*cub_file)->sprites[n][0];
 
 	tmp_len_of_c_nachalo = (*cub_file)->Ry / 2 - (*cub_file)->sprites[n][7] / 2;
-	if (tmp_len_of_c_nachalo < 0)
-	{
-		(*cub_file)->sprites[n][7] = (*cub_file)->Ry;
-		tmp_len_of_c_nachalo = 0;
-	}
-
 	scale_texture_y = (*cub_file)->height_sprite / (*cub_file)->sprites[n][7];;
 	lim = ((*cub_file)->Ry / 2 + (*cub_file)->sprites[n][7] / 2) - 1;
+	if (tmp_len_of_c_nachalo < 0)
+	{
+		i_texture_y = ((*cub_file)->sprites[n][7] - (*cub_file)->Ry) / 2;
+		tmp_len_of_c_nachalo = 0;
+		lim = (*cub_file)->Ry - 1;
+	}
 	while (stolbec_y < (*cub_file)->height_sprite && tmp_len_of_c_nachalo < lim)
 	{
 		stolbec_y = (int)(scale_texture_y * i_texture_y++);

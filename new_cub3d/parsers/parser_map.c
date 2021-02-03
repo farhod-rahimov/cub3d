@@ -38,7 +38,7 @@ t_parse *create_new_elem(void)// ok
     return (new_elem);
 }
 
-int parse(int fd, t_parse **cub_file)
+void	 parse(int fd, t_parse **cub_file)
 {
     char        *line;
     char        *tmp;
@@ -59,8 +59,7 @@ int parse(int fd, t_parse **cub_file)
 	free(line);
 	
 	if (parse2(cub_file, 0) == -1)
-		return (-1);
-    return (0);
+		return ;
 }
 
 int	parse2(t_parse **cub_file, int i) // ok
@@ -157,22 +156,22 @@ int					convert_map(t_parse **cub_file) // ok
 	int b = 1;
 	check_if_map_is_last(cub_file);
 
-	if (!((*cub_file)->map2d = (char **)malloc(sizeof(char *) * (((*cub_file)->map_y * SCALE) + 1))))
+	if (!((*cub_file)->map2d = (char **)malloc(sizeof(char *) * (((*cub_file)->map_y * (*cub_file)->scale) + 1))))
 		ft_error("cannot allocate memmory for converting map into 2-dimensional char array");
 
-	while (y < (*cub_file)->map_y * SCALE)
+	while (y < (*cub_file)->map_y * (*cub_file)->scale)
 	{
-		if (!((*cub_file)->map2d[y] = (char *)malloc(sizeof(char) * ((*cub_file)->map_x * SCALE + 1))))
+		if (!((*cub_file)->map2d[y] = (char *)malloc(sizeof(char) * ((*cub_file)->map_x * (*cub_file)->scale + 1))))
 			ft_error("cannot allocate memmory for converting map into 2-dimensional char array");
-		while (x < (*cub_file)->map_x * SCALE)
+		while (x < (*cub_file)->map_x * (*cub_file)->scale)
 		{
-			while (x < (*cub_file)->map_x * SCALE && x < SCALE * a)
+			while (x < (*cub_file)->map_x * (*cub_file)->scale && x < (*cub_file)->scale * a)
 			{
 				(*cub_file)->map2d[y][x++] = (*cub_file)->map[i];
 			}
 			if ((*cub_file)->map[i + 1] == '\n' || (*cub_file)->map[i + 1] == '\0')
 			{
-				while (x < (*cub_file)->map_x * SCALE)
+				while (x < (*cub_file)->map_x * (*cub_file)->scale)
 				{
 					(*cub_file)->map2d[y][x++] = ' ';
 				}
@@ -182,7 +181,7 @@ int					convert_map(t_parse **cub_file) // ok
 			a++;
 			i++;
 		}
-		while (++y < SCALE * b)
+		while (++y < (*cub_file)->scale * b)
 		{
 			(*cub_file)->map2d[y] = ft_strdup((*cub_file)->map2d[y - 1]);
 		}
@@ -191,9 +190,9 @@ int					convert_map(t_parse **cub_file) // ok
 		x = 0;
 	}
 	x = 0;
-	if (!((*cub_file)->map2d[y] = (char *)malloc(sizeof(char) * ((*cub_file)->map_x * SCALE + 1))))
+	if (!((*cub_file)->map2d[y] = (char *)malloc(sizeof(char) * ((*cub_file)->map_x * (*cub_file)->scale + 1))))
 		ft_error("cannot allocate memmory for converting map into 2-dimensional char array");
-	while (x <= (*cub_file)->map_x * SCALE)
+	while (x <= (*cub_file)->map_x * (*cub_file)->scale)
 		(*cub_file)->map2d[y][x++] = '\0';
 	
 	// printf("\nconverted_map\n");
@@ -225,28 +224,28 @@ int					get_coordinate_of_spites(t_parse **cub_file) //ok
 	(*cub_file)->num_of_sprites = count_sprites((*cub_file)->map);
 	if (!((*cub_file)->sprites = (long double **)malloc(sizeof(long double *) * (*cub_file)->num_of_sprites)))
 		ft_error("cannot allocate memmory for **sprites");
-	while (y < (*cub_file)->map_y * SCALE && i < (*cub_file)->num_of_sprites)
+	while (y < (*cub_file)->map_y * (*cub_file)->scale && i < (*cub_file)->num_of_sprites)
 	{
-		while (x < (*cub_file)->map_x * SCALE)
+		while (x < (*cub_file)->map_x * (*cub_file)->scale)
 		{
 			if ((*cub_file)->map2d[(int)y][(int)x] == '2')
 			{
 				if (!((*cub_file)->sprites[i] = (long double *)malloc(sizeof(long double) * 8)))
 					ft_error("cannot allocate memmory for **sprites");
-				(*cub_file)->sprites[i][0] = -1.0; // scale_sprite_x // каждый раз меняется
+				(*cub_file)->sprites[i][0] = -1.0; // (*cub_file)->scale_sprite_x // каждый раз меняется
 				(*cub_file)->sprites[i][1] = -1.0; // len_of_c (высота спрайта по его центру) // каждый раз меняется
-				(*cub_file)->sprites[i][2] = y / (long double)SCALE; // координата y (y / SCALE) // после каждой отрисовки занчение НЕ меняем
-				(*cub_file)->sprites[i][3] = x / (long double)SCALE; // координата x (x / SCALE) // после каждой отрисовки занчение НЕ меняем
+				(*cub_file)->sprites[i][2] = y / (long double)(*cub_file)->scale; // координата y (y / (*cub_file)->scale) // после каждой отрисовки занчение НЕ меняем
+				(*cub_file)->sprites[i][3] = x / (long double)(*cub_file)->scale; // координата x (x / (*cub_file)->scale) // после каждой отрисовки занчение НЕ меняем
 				(*cub_file)->sprites[i][4] = -1; /// начало спарайта (угол в пи)
 				(*cub_file)->sprites[i][5] = -1; // конец спарайта (угол в пи)
 				(*cub_file)->sprites[i][6] = -1; // ширина спарайта (угол в пи)
 				(*cub_file)->sprites[i][7] = -1; // len_of_c (высота спрайта по его центру для отрисовки)
 				i++;
 			}
-			x += SCALE;
+			x += (*cub_file)->scale;
 		}
 		x = 0;
-		y += SCALE;
+		y += (*cub_file)->scale;
 	}
 
 	return (0);

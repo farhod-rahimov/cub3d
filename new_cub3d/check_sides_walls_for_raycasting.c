@@ -27,7 +27,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'E')
 				{
 					check_lower_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 						check_right_side_walls(cub_file, 0);
 					else
 						storona = 'S';
@@ -43,9 +43,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'S')
 				{
 					// check_right_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 					{
-						if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > SCALE / 3)
+						if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > (*cub_file)->scale / 3)
 						{
 							// check_right_side_walls(cub_file, 0); 
 							storona = 'E';
@@ -70,9 +70,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'W')
 				{
 					check_lower_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 					{
-						if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > SCALE / 3)
+						if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > (*cub_file)->scale / 3)
 						{
 							// check_lower_side_walls(cub_file, 0);
 							storona = 'S';
@@ -94,7 +94,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'S')
 				{
 					// check_left_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_lower_side_walls(cub_file, 0);
 					else
 						storona = 'W';
@@ -113,7 +113,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'W')
 				{
 					check_upper_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_left_side_walls(cub_file, 0); 
 					else
 						storona = 'N';
@@ -129,7 +129,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'N')
 				{
 					// check_left_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_upper_side_walls(cub_file, 0);
 					else
 						storona = 'W';
@@ -148,9 +148,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'E')
 				{
 					check_upper_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 					{
-						if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > SCALE / 3)
+						if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > (*cub_file)->scale / 3)
 						{
 							// check_upper_side_walls(cub_file, 0); 
 							storona = 'N';
@@ -172,7 +172,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'N')
 				{
 					// check_right_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 						check_upper_side_walls(cub_file, 0);
 					else
 						storona = 'E';
@@ -194,9 +194,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'E')
 				{
 					check_upper_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 					{
-						if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > SCALE / 3)
+						if (check_right_side_walls(cub_file, 0) - check_upper_side_walls(cub_file, 0) * -1 > (*cub_file)->scale / 3)
 						{
 							// check_upper_side_walls(cub_file, 0); 
 							storona = 'N';
@@ -218,7 +218,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'N')
 				{
 					// check_right_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 						check_upper_side_walls(cub_file, 0);
 					else
 						storona = 'E';
@@ -237,7 +237,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'W')
 				{
 					check_upper_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_left_side_walls(cub_file, 0); 
 					else
 						storona = 'N';
@@ -253,7 +253,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'N')
 				{
 					// check_left_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 0 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 0 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_upper_side_walls(cub_file, 0);
 					else
 						storona = 'W';
@@ -272,9 +272,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'W')
 				{
 					check_lower_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 					{
-						if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > SCALE / 3)
+						if ((check_left_side_walls(cub_file, 0) * -1) - check_lower_side_walls(cub_file, 0) > (*cub_file)->scale / 3)
 						{
 							// check_lower_side_walls(cub_file, 0);
 							storona = 'S';
@@ -296,7 +296,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'S')
 				{
 					// check_left_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 0)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 0)
 						check_lower_side_walls(cub_file, 0);
 					else
 						storona = 'W';
@@ -315,7 +315,7 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'E')
 				{
 					check_lower_side_walls(cub_file, 0);
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 						check_right_side_walls(cub_file, 0);
 					else
 						storona = 'S';
@@ -331,9 +331,9 @@ char	check_sides_walls_for_raycsting(t_parse **cub_file) //ok
 				if (storona == 'S')
 				{
 					// check_right_side_walls(cub_file, 0); 
-					if (((int)(*cub_file)->c_y + 1) % SCALE == 1 && ((int)(*cub_file)->c_x + 1) % SCALE == 1)
+					if (((int)(*cub_file)->c_y + 1) % (*cub_file)->scale == 1 && ((int)(*cub_file)->c_x + 1) % (*cub_file)->scale == 1)
 					{
-						if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > SCALE / 3)
+						if (check_lower_side_walls(cub_file, 0) - check_right_side_walls(cub_file, 0) > (*cub_file)->scale / 3)
 						{
 							// check_right_side_walls(cub_file, 0); 
 							storona = 'E';

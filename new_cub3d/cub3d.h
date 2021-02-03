@@ -6,7 +6,7 @@
 /*   By: btammara <btammara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:39:46 by btammara          #+#    #+#             */
-/*   Updated: 2021/01/31 15:47:05 by btammara         ###   ########.fr       */
+/*   Updated: 2021/02/03 15:39:36 by btammara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@
 # include <math.h>
 # include "./get_next_line/get_next_line.h"
 #include "/Users/btammara/projects/cub3d/minilibx_mms_20200219/mlx.h"
-#define SCALE 100
+// #define SCALE 80 // 300 300 ok
+// #define SCALE 50 // 200 200 ok
+// #define SCALE 30 // 100 100 ok
+// #define SCALE 20 // 50 50 +- ok
+#define SCALE 25 // 30 30 +- ok
 #define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091
 typedef	struct		s_parse
 {
@@ -52,6 +56,7 @@ typedef	struct		s_parse
 	long double	c_y;
 	// int		c_y;
 	char	p_of_view;
+	int scale;
 
 	char	side;
 	char	storona;
@@ -113,7 +118,7 @@ typedef struct  s_vars {
 int					get_next_line(int fd, char **line);
 t_parse				*create_new_elem(void);
 
-int					parse(int fd, t_parse **cub_file);
+void				parse(int fd, t_parse **cub_file);
 int					parse2(t_parse **cub_file, int i);
 int					get_resolution(t_parse **cub_file, int i);
 int					get_north_texture(t_parse **cub_file, int i);
@@ -137,8 +142,8 @@ void				check_if_resolution_is_ok(t_parse **cub_file);
 int					check_if_floor_color_is_ok(t_parse **cub_file);
 int					check_if_ceiling_color_is_ok(t_parse **cub_file);
 int					check_if_map_is_ok(t_parse **cub_file);
-void				check_map_left_to_right(char **tmp, int x, int y, int flag);
-void				check_map_up_to_down(char **tmp, int x, int y, int flag);
+void				check_map_left_to_right(t_parse **cub_file, int x, int y, int flag);
+void				check_map_up_to_down(t_parse **cub_file, int x, int y, int flag);
 void				check_closed_spaces(t_parse **cub_file);
 
 long double				check_upper_side_walls(t_parse **cub_file, int i);
@@ -169,13 +174,17 @@ void				draw_right_side_walls(t_parse **cub_file);
 void				draw_left_side_walls(t_parse **cub_file);
 
 int					move2d(t_parse **cub_file);
-int					get_coordinate_of_player(t_parse **cub_file);
-int					get_player_point_of_view(t_parse **cub_file);
+void				get_coordinate_of_player(t_parse **cub_file);
+void				get_player_point_of_view(t_parse **cub_file);
+void				work_with_cub_file(t_parse **cub_file, int argc, char **argv);
+void				check_if_dot_cub(char *filename);
+void				ft_define_scale(t_parse **cub_file);
 int					key_hook(int keycode, t_parse **cub_file);
+int					red_cross(t_parse **cub_file);
 
 int					ray_cast(t_parse **cub_file);
 int					ray_cast_sprites(t_parse **cub_file);
-void				ft_screenshot(t_parse **cub_file);
+void				ft_screenshot(t_parse **cub_file, char *s1);
 void				complete_data_sprites(t_parse **cub_file);
 void 				draw_front_of_him(t_parse **cub_file, int n, int tmp_x);
 int					check_if_sprite_is_drawn(t_parse **cub_file);
@@ -206,5 +215,7 @@ int					ft_isalpha(int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 size_t				ft_strlen(const char *s);
 char				*ft_strjoin_3(char const *s1, char const *s2, char const *s3);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t				ft_strlen(const char *s);
 void				ft_error(char *text);
 #endif

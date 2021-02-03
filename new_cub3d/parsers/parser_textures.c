@@ -6,7 +6,7 @@
 /*   By: btammara <btammara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 14:22:49 by btammara          #+#    #+#             */
-/*   Updated: 2021/01/31 11:17:20 by btammara         ###   ########.fr       */
+/*   Updated: 2021/02/03 09:03:15 by btammara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	get_resolution(t_parse **cub_file, int i) //ok
 		ft_error("resolution is wrong. It should be written like \"R 800 500\"");
 	tmp_str = (*cub_file)->p_file + i;
 
-	if (((*cub_file)->Rx = ft_atoi(tmp_str)) < 0)
-		ft_error("resolution cannot be negative");
+	if (((*cub_file)->Rx = ft_atoi(tmp_str)) <= 0)
+		ft_error("resolution cannot be negative or less than 1");
 	else if ((*cub_file)->Rx > x)
 		(*cub_file)->Rx = x;
 
@@ -52,8 +52,8 @@ int	get_resolution(t_parse **cub_file, int i) //ok
 	if (!ft_isdigit((*cub_file)->p_file[i]))
 		ft_error("resolution is wrong. It should be written like \"R 800 500\"");
 	tmp_str = (*cub_file)->p_file + i;
-	if (((*cub_file)->Ry = ft_atoi(tmp_str)) < 0)
-		ft_error("resolution cannot be negative");
+	if (((*cub_file)->Ry = ft_atoi(tmp_str)) <= 0)
+		ft_error("resolution cannot be negative or less than 1");
 	else if ((*cub_file)->Ry > y)
 		(*cub_file)->Ry = y;
 	

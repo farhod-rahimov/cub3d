@@ -35,6 +35,7 @@ int			ray_cast(t_parse **cub_file)
 	char *color;
 	int	color_int;
 	int i_texture_y = 0;
+	int lim;
 
 	while ((*cub_file)->FOV <= (*cub_file)->player_a + (PI / 6) && tmp_x < (*cub_file)->Rx)
 	{
@@ -42,47 +43,48 @@ int			ray_cast(t_parse **cub_file)
 		if ((*cub_file)->len_of_c < 0)
 			(*cub_file)->len_of_c = (*cub_file)->len_of_c * -1;
 		(*cub_file)->array_walls[tmp_x] = (*cub_file)->len_of_c;
-		tmp_len_of_c = (*cub_file)->len_of_c / SCALE;
+		tmp_len_of_c = (*cub_file)->len_of_c / (*cub_file)->scale;
 		tmp_len_of_c = (*cub_file)->Ry / (tmp_len_of_c * cosl((*cub_file)->player_a - (*cub_file)->FOV));
 		tmp_len_of_c_nachalo = (*cub_file)->Ry / 2 - tmp_len_of_c / 2;
-		if (tmp_len_of_c_nachalo < 0)
-		{
-			tmp_len_of_c = (*cub_file)->Ry;
-			tmp_len_of_c_nachalo = 0;
-		}
 		if (side == 'N')
 		{
-			scale_texture_x = (float)(*cub_file)->width_north / (float)SCALE;
+			scale_texture_x = (float)(*cub_file)->width_north / (float)(*cub_file)->scale;
 			(*cub_file)->addr_text = mlx_get_data_addr((*cub_file)->img_north, &(*cub_file)->bits_per_pixel_text, &(*cub_file)->line_length_text, &(*cub_file)->endian_text);
 			scale_texture_y = (*cub_file)->height_north / tmp_len_of_c;
-			stolbec_x = ((int)(*cub_file)->c_x % SCALE) * scale_texture_x;
+			stolbec_x = ((int)(*cub_file)->c_x % (*cub_file)->scale) * scale_texture_x;
 			(*cub_file)->height = (*cub_file)->height_north;
 		}
 		else if (side == 'S')
 		{
-			scale_texture_x = (float)(*cub_file)->width_south / (float)SCALE;
+			scale_texture_x = (float)(*cub_file)->width_south / (float)(*cub_file)->scale;
 			(*cub_file)->addr_text = mlx_get_data_addr((*cub_file)->img_south, &(*cub_file)->bits_per_pixel_text, &(*cub_file)->line_length_text, &(*cub_file)->endian_text);
 			scale_texture_y = (*cub_file)->height_south / tmp_len_of_c;
-			stolbec_x = ((SCALE - (int)(*cub_file)->c_x % SCALE)) * scale_texture_x;
+			stolbec_x = (((*cub_file)->scale - (int)(*cub_file)->c_x % (*cub_file)->scale)) * scale_texture_x;
 			(*cub_file)->height = (*cub_file)->height_south;
 		}
 		else if (side == 'W')
 		{
-			scale_texture_x = (float)(*cub_file)->width_west / (float)SCALE;
+			scale_texture_x = (float)(*cub_file)->width_west / (float)(*cub_file)->scale;
 			(*cub_file)->addr_text = mlx_get_data_addr((*cub_file)->img_west, &(*cub_file)->bits_per_pixel_text, &(*cub_file)->line_length_text, &(*cub_file)->endian_text);
 			scale_texture_y = (*cub_file)->height_west / tmp_len_of_c;
-			stolbec_x = ((SCALE - (int)(*cub_file)->c_y % SCALE)) * scale_texture_x;
+			stolbec_x = (((*cub_file)->scale - (int)(*cub_file)->c_y % (*cub_file)->scale)) * scale_texture_x;
 			(*cub_file)->height = (*cub_file)->height_west;
 		}
 		else if (side == 'E')
 		{
-			scale_texture_x = (float)(*cub_file)->width_east / (float)SCALE;
+			scale_texture_x = (float)(*cub_file)->width_east / (float)(*cub_file)->scale;
 			(*cub_file)->addr_text = mlx_get_data_addr((*cub_file)->img_east, &(*cub_file)->bits_per_pixel_text, &(*cub_file)->line_length_text, &(*cub_file)->endian_text);
 			scale_texture_y = (*cub_file)->height_east / tmp_len_of_c;
-			stolbec_x = ((int)(*cub_file)->c_y % SCALE) * scale_texture_x;
+			stolbec_x = ((int)(*cub_file)->c_y % (*cub_file)->scale) * scale_texture_x;
 			(*cub_file)->height = (*cub_file)->height_east;
 		}
-		int lim = ((*cub_file)->Ry / 2 + tmp_len_of_c / 2) - 1;
+		lim = ((*cub_file)->Ry / 2 + tmp_len_of_c / 2) - 1;
+		if (tmp_len_of_c_nachalo < 0)
+		{
+			i_texture_y = (tmp_len_of_c - (*cub_file)->Ry) / 2;
+			tmp_len_of_c_nachalo = 0;
+			lim = (*cub_file)->Ry - 1;
+		}
 		while (stolbec_y < (*cub_file)->height && tmp_len_of_c_nachalo < lim)
 		{
 			stolbec_y = (int)(scale_texture_y * i_texture_y++);
@@ -136,54 +138,7 @@ int			ray_cast_sprites(t_parse **cub_file)
 		(*cub_file)->FOV += (PI / 3) / (*cub_file)->Rx;
 		(*cub_file)->tmp_x++;
 	}
-	// ft_screenshot(cub_file);
 	return (0);
-}
-
-void				ft_screenshot(t_parse **cub_file)
-{
-	int fd;
-	unsigned int n = 0;
-	signed int s = 0;
-	unsigned int size = 0;
-
-	if ((fd = open("cub3D.bmp", O_CREAT | O_RDWR | O_TRUNC, 0666)) < 0)
-	{
-		printf ("cannot create a new .bmp file\n");
-		exit(1);
-	}
-	write(fd, "BM", 2);
-	size = 54 + ((*cub_file)->Ry * (*cub_file)->Rx) * (*cub_file)->bits_per_pixel;
-	write(fd, &size, 4); // общий размер файла
-	write(fd, &n, 2);
-	write(fd, &n, 2);
-	n = 54;
-	write(fd, &n, 4); // на сколько байт сместить до actual pixel data in bytes ИСПРАВЬ (сейчас это 54)
-
-	n = 40;
-	write(fd, &n, 4);
-	write(fd, &(*cub_file)->Rx, 4);
-	write(fd, &(*cub_file)->Ry, 4);
-	n = 1;
-	write(fd, &n, 2);
-	write(fd, &(*cub_file)->bits_per_pixel, 2);
-	n = 0;
-	write(fd, &n, 4);
-	write(fd, &n, 4);
-	s = 0;
-	write(fd, &s, 4);
-	write(fd, &s, 4);
-	write(fd, &n, 4);
-	write(fd, &n, 4);
-
-	s = (*cub_file)->Ry;
-
-	while (s > 0)
-	{
-		s--;
-		write(fd, (*cub_file)->addr + (s * (*cub_file)->line_length), (*cub_file)->Rx * ((*cub_file)->bits_per_pixel / 8));
-	}
-	close(fd);
 }
 
 void				match_sprites_as_not_drawn(t_parse **cub_file)
@@ -210,8 +165,8 @@ void			get_height_sprite_from_center(t_parse **cub_file)
 
 	while (i < (*cub_file)->num_of_sprites)
 	{
-		a = fabsl((long double)(*cub_file)->player_x - ((*cub_file)->sprites[i][3] * SCALE + SCALE / 2));
-		b = fabsl((long double)(*cub_file)->player_y - ((*cub_file)->sprites[i][2] * SCALE + SCALE / 2));
+		a = fabsl((long double)(*cub_file)->player_x - ((*cub_file)->sprites[i][3] * (*cub_file)->scale + (*cub_file)->scale / 2));
+		b = fabsl((long double)(*cub_file)->player_y - ((*cub_file)->sprites[i][2] * (*cub_file)->scale + (*cub_file)->scale / 2));
 		(*cub_file)->sprites[i][1] = sqrtl(a * a + b * b); // len_of_c (высота спрайта по его центру) // каждый раз меняется
 		i++;
 	}

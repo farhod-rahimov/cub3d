@@ -6,7 +6,7 @@
 /*   By: btammara <btammara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 08:44:33 by btammara          #+#    #+#             */
-/*   Updated: 2021/01/31 08:57:21 by btammara         ###   ########.fr       */
+/*   Updated: 2021/02/03 17:10:49 by btammara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ char	*ft_strjoin_3(char const *s1, char const *s2, char const *s3)
 	char	*p;
 
 	if (s1 == NULL)
-		len = ft_strlen(s2);
+		len = ft_strlen(s2) + ft_strlen(s3);
 	else
-		len = ft_strlen(s1) + ft_strlen(s2) + + ft_strlen(s3);
+		len = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(s3);
 	i = 0;
 	if ((p = (char *)malloc((len + 1) * sizeof(char))))
 	{

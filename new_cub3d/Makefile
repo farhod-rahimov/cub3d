@@ -6,7 +6,7 @@
 #    By: btammara <btammara@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/14 11:36:07 by btammara          #+#    #+#              #
-#    Updated: 2021/01/31 08:54:15 by btammara         ###   ########.fr        #
+#    Updated: 2021/02/03 09:57:35 by btammara         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS	=	./get_next_line/get_next_line.c \
 			./cub3d_utils/ft_substr.c \
 			./cub3d_utils/ft_strjoin_3.c \
 			./cub3d_utils/ft_error.c \
+			./cub3d_utils/ft_strncmp.c \
 			./move_2d.c \
 			./ray_cast.c \
 			./check_sides_walls_for_raycasting.c \
@@ -29,10 +30,11 @@ SRCS	=	./get_next_line/get_next_line.c \
 			./draw_lines_map_2d/check_sides_walls.c \
 			./check_sides_sprites.c \
 			./draw_lines_map_2d/draw_sides_walls.c \
+			./ft_screenshot.c
 
 OBJS	= 	$(SRCS:.c=.o)
 
-NAME	= 	cub3d
+NAME	= 	cub3D
 CC		= 	gcc
 RM		= 	rm -f
 
