@@ -1,0 +1,14 @@
+R 500 500
+NO /Users/btammara/Desktop/north_1.xpm
+SO /Users/btammara/Desktop/south_1.xpm
+WE /Users/btammara/Desktop/west_1.xpm
+EA /Users/btammara/Desktop/east_1.xpm
+
+S /Users/btammara/Desktop/wifi.xpm
+F 142, 218, 232
+C 142, 218, 54
+
+1111
+1001
+1N01
+1111
