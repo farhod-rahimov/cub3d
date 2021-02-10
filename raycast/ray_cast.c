@@ -83,7 +83,7 @@ int			ray_cast(t_parse **cub_file)
 		{
 			i_texture_y = (tmp_len_of_c - (*cub_file)->Ry) / 2;
 			tmp_len_of_c_nachalo = 0;
-			lim = (*cub_file)->Ry - 1;
+			lim = (*cub_file)->Ry;
 		}
 		while (stolbec_y < (*cub_file)->height && tmp_len_of_c_nachalo < lim)
 		{
